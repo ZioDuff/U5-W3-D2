@@ -1,14 +1,17 @@
 package JacopoDemaio.gestioneDispositivi_Security.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import JacopoDemaio.gestioneDispositivi_Security.enums.Role;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -17,7 +20,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @ToString
-public class Dipendente {
+public class Dipendente implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -34,6 +37,9 @@ public class Dipendente {
     private String password;
 
     private String avatarURL;
+//    aggiungiamo un ruolo al nostro dipendente per diversificare poi i vari metodi
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public Dipendente(String username, String name, String surname, String email, String password) {
         this.username = username;
@@ -41,5 +47,33 @@ public class Dipendente {
         this.surname = surname;
         this.email = email;
         this.password = password;
+//        stabiliamo che ogni dipendente creato sia sempre prima un user semplice
+        this.role = Role.USER;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        restituisce la lista dei ruoli che puo avere il dipendente 
+        return List.of(new SimpleGrantedAuthority(this.role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
