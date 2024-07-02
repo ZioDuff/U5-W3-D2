@@ -3,6 +3,7 @@ package JacopoDemaio.gestioneDispositivi_Security.exceptions;
 
 import JacopoDemaio.gestioneDispositivi_Security.payloads.ErrorsDTO;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -41,5 +42,11 @@ public class ExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorsDTO handleGenericErrors(Exception ex){
         return new ErrorsDTO("Errore lato server!!", LocalDateTime.now());
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorsDTO handleForbidden(AuthorizationDeniedException ex){
+        return new ErrorsDTO("Non hai accesso a queste funzionalità", LocalDateTime.now());
     }
 }
