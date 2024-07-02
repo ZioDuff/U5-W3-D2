@@ -11,8 +11,6 @@ import java.util.Map;
 @Configuration
 public class ServerConfiguration {
     // creazione classe di configurazione, questa ci servira per comunicare con cloudinary per l'upload delle nostre immagini
-    @Configuration
-    public class serverConfig {
         @Bean
 //    richiamiamo la classe cloudinary nel nostro metodo e nei parametri vuole i nostri dati presenti nel nostro file .properties
 //    ATTENZIONE bisogna esattamente richiamare i nomi giusti, anche un piccolo typo non ci permettere di eseguire il codice
@@ -27,5 +25,7 @@ public class ServerConfiguration {
             configuration.put("api_secret", secret);
             return new Cloudinary(configuration);
         }
+
+
     }
-}
+

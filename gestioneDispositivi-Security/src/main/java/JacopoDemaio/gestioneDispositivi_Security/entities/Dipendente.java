@@ -1,6 +1,7 @@
 package JacopoDemaio.gestioneDispositivi_Security.entities;
 
 import JacopoDemaio.gestioneDispositivi_Security.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @ToString
+@JsonIgnoreProperties({"password", "role","enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
 public class Dipendente implements UserDetails {
 
     @Id
@@ -53,7 +55,7 @@ public class Dipendente implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        restituisce la lista dei ruoli che puo avere il dipendente 
+//        restituisce la lista dei ruoli che puo avere il dipendente
         return List.of(new SimpleGrantedAuthority(this.role.name()));
     }
 
