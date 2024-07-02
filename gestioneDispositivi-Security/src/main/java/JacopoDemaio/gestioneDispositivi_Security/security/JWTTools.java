@@ -31,4 +31,8 @@ public class JWTTools {
             throw  new UnauthorizedException("Problemi col token! Riprova");
         }
     }
+
+    public String extractIdFromToken(String token){
+        return Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build().parseSignedClaims(token).getPayload().getSubject();
+    }
 }
